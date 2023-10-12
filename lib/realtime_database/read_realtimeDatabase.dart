@@ -24,7 +24,7 @@ class _RealtimeDbReadState extends State<RealtimeDbRead> {
   Future<void> readData() async {
     //real time data url + tablename.json
     var url = "https://flutter16firebase2-f3375-default-rtdb.firebaseio.com/" +
-        "data.json";
+        "register.json";
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -40,6 +40,7 @@ class _RealtimeDbReadState extends State<RealtimeDbRead> {
       });
     } catch (e) {
       print(e);
+
     }
   }
 

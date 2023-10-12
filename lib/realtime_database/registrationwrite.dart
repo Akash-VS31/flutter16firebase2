@@ -16,7 +16,7 @@ class _RegistrationWriteState extends State<RegistrationWrite> {
   void WriteData() async {
     _form.currentState?.save();
     var url = "https://flutter16firebase2-f3375-default-rtdb.firebaseio.com/" +
-        "data.json";
+        "register.json";
     try {
       final response = await http.post(
         Uri.parse(url),
