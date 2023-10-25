@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter16firebase2/firebase_crud_operation/addtask.dart';
+import 'package:flutter16firebase2/firebase_crud_operation/update_task.dart';
 
 class Displaytask extends StatefulWidget {
   const Displaytask({super.key});
@@ -12,10 +13,11 @@ class Displaytask extends StatefulWidget {
 
 class _DisplaytaskState extends State<Displaytask> {
   final CollectionReference task =
-  FirebaseFirestore.instance.collection('tasks');
-  deleteTask(docID){
+      FirebaseFirestore.instance.collection('tasks');
+  deleteTask(docID) {
     task.doc(docID).delete;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,25 +37,50 @@ class _DisplaytaskState extends State<Displaytask> {
         icon: Icon(Icons.add),
       ),
       body: StreamBuilder(
-          stream:task.orderBy('timestamp').snapshots(),
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          stream: task.orderBy('timestamp').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context,index){
-                 final DocumentSnapshot tasksnap=
-                      snapshot.data!.docs[index];
-                 return Card(
-                   child: ListTile(
-                     title: Text('${tasksnap['content']}'),
-                     leading: Text('${tasksnap['timestamp']}'),
-                   ),
-                 );
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final DocumentSnapshot tasksnap =
+                        snapshot.data!.docs[index];
+                    return Card(
+                        child: Column(
+                      children: [
+                        ListTile(
+                            title: Text('${tasksnap['content']}'),
+                            subtitle: Text('${tasksnap['timestamp']}')),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return Updatetask(
+                                        content: tasksnap['content'],
+                                        timestamp:
+                                            tasksnap['timestamp'].toString(),
+                                        id: tasksnap.id,
+                                      );
+                                    },
+                                  ));
+                                },
+                                icon: Icon(color: Colors.teal, Icons.edit)),
+                            IconButton(
+                                onPressed: () {
+                                  deleteTask(tasksnap.id);
+                                },
+                                icon: Icon(color: Colors.red, Icons.delete))
+                          ],
+                        )
+                      ],
+                    ));
                   });
             }
             return Container();
-          }
-      ),
+          }),
     );
   }
 }
