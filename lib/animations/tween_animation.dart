@@ -1,61 +1,52 @@
 import 'package:flutter/material.dart';
-class Tweenanimation extends StatefulWidget {
-  const Tweenanimation({super.key});
 
+class MyApp extends StatelessWidget
+{
   @override
-  State<Tweenanimation> createState() => _TweenanimationState();
+  Widget build(BuildContext context)
+  {
+    return MaterialApp(home: Scaffold(body: Center(child: TweenAnimation(),),),);
+  }
 }
 
-class _TweenanimationState extends State<Tweenanimation>  with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
-  Animation<TextStyle>? _animation;
+class TweenAnimation extends StatefulWidget
+{
+  @override
+  TweenAnimationState createState() => TweenAnimationState();
+}
+
+class TweenAnimationState extends State<TweenAnimation> with SingleTickerProviderStateMixin
+{
+  AnimationController? controller;
+  Animation<double>? sizeAnimation;
+  late Animation<Color?> _color;
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
+    controller = AnimationController(duration: const Duration(seconds: 2), vsync: this,)..repeat(reverse: true);
+    sizeAnimation = Tween<double>(begin: 200, end: 50,).animate(controller!);
+// color tween
+    _color =
+        ColorTween(begin: Colors.purple, end: Colors.red).animate(controller!);  }
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 4000,
-      ),
-    );
+  @override
+  Widget build(BuildContext context)
+  {
+    return AnimatedBuilder(animation: controller!,
 
-    _animation = TextStyleTween(
-      begin: TextStyle(
-        fontSize: 20.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w300,
-      ),
-      end: TextStyle(
-        fontSize: 40.0,
-        color: Colors.red,
-        fontWeight: FontWeight.w900,
-      ),
-    ).animate(_controller!);
 
-    _animation!.addListener(() {
-      setState(() {});
-    });
-
-    _controller!.forward();
+      builder: (context, child)
+      {
+        return Container(width: sizeAnimation!.value, height: sizeAnimation!.value, color: _color.value,);
+      },);
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
+    controller!.dispose();
     super.dispose();
-    _controller!.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          'Animations!',
-          style: _animation!.value,
-        ),
-      ),
-    );
   }
 }
