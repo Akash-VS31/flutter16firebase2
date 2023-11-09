@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter16firebase2/animations/tween_animation.dart';
-import 'package:flutter16firebase2/email_verification/loginpage.dart';
-import 'package:flutter16firebase2/phonenumber_authantication/phone.dart';
+import 'package:flutter16firebase2/physics_animation/physics_animation_sample2.dart';
 void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    home: TweenAnimation(),
+    home: PhysicsAnimation(),
     );
   }
 }
